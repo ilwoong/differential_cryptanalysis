@@ -3,18 +3,16 @@ import pandas as pd
 import os
 import toycipher as tc
 
-## 차분 분석에 사용하기 위한 차분분포표 출력
-# @param sbox 차분 분포표를 만들 sbox
-def print_differential_table(sbox):
+## 차분 분석에 사용하기 위한 입력-출력 테이블 출력
+# @param sbox 입력-출력 테이블을 생성할 sbox
+def print_inout_table(sbox):
     dim = len(sbox)
     np.set_printoptions(formatter={'int':hex})
-    result = np.zeros(shape=(dim,dim))
-    prob = np.zeros(shape=(dim,dim))
+    result = np.zeros(shape=(dim,dim))    
 
     for i in range(dim):
         for j in range(dim):
-            result[i, j] = sbox[i] ^ sbox[j]
-            prob[i ^ j, sbox[i] ^ sbox[j]] += 1
+            result[i, j] = sbox[i] ^ sbox[j]            
 
     cols = []
     rows = []
@@ -31,6 +29,27 @@ def print_differential_table(sbox):
     print(df)
     print()
 
+## 차분 분석에 사용하기 위한 차분분포표 출력
+# @param sbox 차분 분포표를 만들 sbox
+def print_differential_prob_table(sbox):
+    dim = len(sbox)
+    np.set_printoptions(formatter={'int':hex})    
+    prob = np.zeros(shape=(dim,dim))
+
+    for i in range(dim):
+        for j in range(dim):            
+            prob[i ^ j, sbox[i] ^ sbox[j]] += 1
+
+    cols = []
+    rows = []
+
+    for i in range(dim):
+        cols.append(str(i))
+        rows.append(str(i))
+    
+    print("SBox: ", sbox)
+    print()
+    
     df = pd.DataFrame(prob, index = rows, columns = cols, dtype=int)
     print("입력차분-출력차분 빈도표")
     print(df)
