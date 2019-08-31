@@ -140,7 +140,13 @@ def perform_dc():
     cipher = tc.ToyCipher()
     cipher.random_keys()    
 
+    print("First 4-bit key recovery")
     try_recover_key(cipher, 32, input_diff=(2, 0, 0), target_diff=(8, 0, 0), key_mask=(0xf, 0, 0))
+
+    print("Second 4-bit key recovery")
     try_recover_key(cipher, 32, input_diff=(0, 2, 0), target_diff=(0, 0x4, 0), key_mask=(0, 0xf, 0))
+
+    print("Last 4-bit key recovery")
     try_recover_key(cipher, 128, input_diff=(0, 0, 2), target_diff=(5, 0, 0xa), key_mask=(0, 0, 0xf))
+    
     print("Real Key ", cipher.rks[3])
